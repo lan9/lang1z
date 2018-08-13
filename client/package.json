@@ -9,11 +9,12 @@
   },
   "scripts": {
     "build": "npx webpack --mode production",
-    "dev": "npx webpack --mode developement"
+    "dev": "npx webpack --watch --mode development"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "copy-webpack-plugin": "^4.5.2",
