@@ -2,11 +2,12 @@
   margin: auto;
   margin-top: 10vh;
   margin-bottom: 10vh;
-  min-width: 400px;
-  width: 400px;
+  min-width: 200px;
+  max-width: 400px;
   height: 500px;
   background-color: white;
-  border-radius: 5px;
+  border-radius: 1.5rem;
+  border: 10px solid darkgray;
   padding: 50px;
 }
 
