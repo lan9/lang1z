@@ -1,10 +1,11 @@
 .App-content {
+  position: relative;
   margin: auto;
   margin-top: 10vh;
   margin-bottom: 10vh;
   min-width: 200px;
   max-width: 400px;
-  height: 500px;
+  height: 200px;
   background-color: white;
   border-radius: 1.5rem;
   border: 10px solid darkgray;
@@ -13,6 +14,13 @@
 
 .App-title {
   font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.App-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  padding-bottom: 1.5rem;
 }
 
 .App-logo {
@@ -20,7 +28,15 @@
   height: 80px;
 }
 
+.App-icon {
+  margin-right: 0.5rem;
+}
+
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
