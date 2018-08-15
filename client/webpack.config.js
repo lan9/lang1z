@@ -6,7 +6,7 @@ module.exports = {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        filename: 'bundle.[chunkhash:16].js'
     },
     module: {
         rules: [
@@ -39,7 +39,6 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: 'templates/index.html',
-            hash: true,
             filename: 'index.html' //relative to root of the application
         }),
         new CopyWebpackPlugin([

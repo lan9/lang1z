@@ -8,7 +8,7 @@
     "style-loader": "^0.22.1"
   },
   "scripts": {
-    "build": "npx webpack --mode production && npx sw-precache --config=sw-precatch.config.json",
+    "build": "rm -rf dist && npx webpack --mode production && npx sw-precache --config=sw-precatch.config.json",
     "dev": "npx webpack --watch --mode development"
   },
   "devDependencies": {
