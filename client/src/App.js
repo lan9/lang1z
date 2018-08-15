@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './styles/App.css';
 import twitterLogo from './images/twitter.svg'
 import linkedInLogo from './images/linkedin.svg'
+import registerServiceWorker from './registerServiceWorker';
 
 class App extends Component {
     constructor(props, context) {
@@ -30,6 +31,7 @@ class App extends Component {
 
     componentDidMount() {
         window.addEventListener("resize", this.updateDimensions.bind(this));
+        registerServiceWorker();
     }
 
     componentWillUnmount() {

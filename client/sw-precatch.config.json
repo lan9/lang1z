@@ -1,0 +1,7 @@
+{
+  "staticFileGlobs": [
+    "dist/*"
+  ],
+  "swFilePath": "dist/service-worker.js",
+  "stripPrefix": "dist/"
+}

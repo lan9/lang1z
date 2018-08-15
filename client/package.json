@@ -8,7 +8,7 @@
     "style-loader": "^0.22.1"
   },
   "scripts": {
-    "build": "npx webpack --mode production",
+    "build": "npx webpack --mode production && npx sw-precache --config=sw-precatch.config.json",
     "dev": "npx webpack --watch --mode development"
   },
   "devDependencies": {
@@ -21,6 +21,7 @@
     "css-loader": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
     "react-hot-loader": "^4.3.3",
+    "sw-precache": "^5.2.1",
     "url-loader": "^1.0.1",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.1.0"
