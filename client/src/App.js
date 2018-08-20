@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './styles/App.css';
 import twitterLogo from './images/twitter.svg'
 import linkedInLogo from './images/linkedin.svg'
+import sunIcon from './images/sun.svg'
+import moonIcon from './images/moon.svg'
 import registerServiceWorker from './registerServiceWorker';
 
 class App extends Component {
@@ -9,11 +11,19 @@ class App extends Component {
         super(props, context);
         this.state = {
             width: undefined,
-            height: undefined
+            height: undefined,
+            nightmode: false
         }
+        this._toggleNightMode = this._toggleNightMode.bind(this);
+        this._updateDimensions = this._updateDimensions.bind(this);
     }
 
-    updateDimensions() {
+    _toggleNightMode() {
+        const {nightmode} = this.state;
+        this.setState({nightmode: !nightmode});
+    }
+
+    _updateDimensions() {
         const w = window,
             d = document,
             documentElement = d.documentElement,
@@ -26,20 +36,22 @@ class App extends Component {
     }
 
     componentWillMount() {
-        this.updateDimensions();
+        this._updateDimensions();
     }
 
     componentDidMount() {
-        window.addEventListener("resize", this.updateDimensions.bind(this));
+        window.addEventListener("resize", this._updateDimensions);
         registerServiceWorker();
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions.bind(this));
+        window.removeEventListener("resize", this._updateDimensions);
     }
 
     render() {
         const wideMode = window.innerWidth > 500;
+        const {nightmode} = this.state;
+        const nightmodeIcon = nightmode ? moonIcon : sunIcon;
         return (
 
             <div className="App-backdrop">
@@ -49,6 +61,7 @@ class App extends Component {
                     <div className="App-bottom-bar">
                         <Icon url="https://twitter.com/lang1z" logo={twitterLogo}/>
                         <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo}/>
+                        <Icon className="App-nightmode" logo={nightmodeIcon} onClick={this._toggleNightMode}/>
                     </div>
                 </div>
             </div>
@@ -57,9 +70,11 @@ class App extends Component {
 }
 
 function Icon(props) {
-    return <span className="App-icon">
+    return <span className={props.className} onClick={props.onClick}>
+        {props.url ? <span className="App-icon">
           <a target="_blank" href={props.url}><img src={props.logo}/></a>
-        </span>;
+        </span> : <img src={props.logo}/>}
+    </span>
 }
 
 export default App;

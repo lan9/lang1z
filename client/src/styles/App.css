@@ -18,9 +18,11 @@
 }
 
 .App-bottom-bar {
+  left: 0;
+  right: 0;
   position: absolute;
   bottom: 0;
-  padding-bottom: 1.5rem;
+  padding: inherit;
 }
 
 .App-logo {
@@ -30,6 +32,11 @@
 
 .App-icon {
   margin-right: 0.5rem;
+}
+
+.App-nightmode {
+  cursor: pointer;
+  float: right;
 }
 
 @keyframes App-logo-spin {
