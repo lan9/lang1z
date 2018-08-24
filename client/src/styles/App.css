@@ -1,16 +1,3 @@
-.App-content {
-  position: relative;
-  margin: auto;
-  margin-top: 10vh;
-  margin-bottom: 10vh;
-  min-width: 200px;
-  max-width: 400px;
-  height: 200px;
-  background-color: white;
-  border-radius: 1.5rem;
-  border: 10px solid darkgray;
-  padding: 50px;
-}
 
 .App-title {
   font-size: 2rem;

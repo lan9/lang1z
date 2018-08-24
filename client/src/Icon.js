@@ -8,7 +8,6 @@ const NightmodeSpan = styled.span`
 
 const Span = styled.span``;
 
-
 export default function Icon(props) {
 
     const Element = props.nightmode? NightmodeSpan: Span;
