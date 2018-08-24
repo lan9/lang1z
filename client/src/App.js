@@ -97,7 +97,7 @@ const AppContent = styled.div`
   height: 200px;
   background-color: ${props => props.theme.bgColor};
   border-radius: 1.5rem;
-  border: 10px solid ${props => props.theme.bgColor};
+  border: 10px solid ${props => props.theme.backdropColor};
   padding: 50px;
 `;
 
