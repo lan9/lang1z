@@ -5,6 +5,7 @@ import linkedInLogo from './images/linkedin.svg'
 import sunIcon from './images/sun.svg'
 import moonIcon from './images/moon.svg'
 import registerServiceWorker from './registerServiceWorker';
+import Icon from './Icon'
 
 class App extends Component {
     constructor(props, context) {
@@ -61,7 +62,7 @@ class App extends Component {
                     <div className="App-bottom-bar">
                         <Icon url="https://twitter.com/lang1z" logo={twitterLogo}/>
                         <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo}/>
-                        <Icon className="App-nightmode" logo={nightmodeIcon} onClick={this._toggleNightMode}/>
+                        <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode}/>
                     </div>
                 </div>
             </div>
@@ -69,12 +70,5 @@ class App extends Component {
     }
 }
 
-function Icon(props) {
-    return <span className={props.className} onClick={props.onClick}>
-        {props.url ? <span className="App-icon">
-          <a target="_blank" href={props.url}><img src={props.logo}/></a>
-        </span> : <img src={props.logo}/>}
-    </span>
-}
 
 export default App;

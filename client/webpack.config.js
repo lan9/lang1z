@@ -14,7 +14,7 @@ module.exports = {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
                 exclude: /node_modules/,
-                query: {presets: ['env', 'react']}
+                query: {presets: ['env', 'react'], plugins: ["styled-components"]}
             },
             {
                 test: /\.css$/,
