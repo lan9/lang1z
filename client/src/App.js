@@ -51,7 +51,7 @@ class App extends Component {
     }
 
     render() {
-        const wideMode = window.innerWidth > 500;
+        //const wideMode = window.innerWidth > 500;
         const {nightmode} = this.state;
         const nightmodeIcon = nightmode ? moonIcon : sunIcon;
 
