@@ -9,14 +9,7 @@ const NightmodeSpan = styled.span`
 
 const Span = styled.span``;
 
-export default class Icon extends React.PureComponent {
-
-    static propTypes = {
-        nightmode: PropTypes.bool,
-        onClick: PropTypes.func,
-        logo: PropTypes.func,
-        url: PropTypes.string
-    }
+class Icon extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);
@@ -32,3 +25,12 @@ export default class Icon extends React.PureComponent {
         </Element>
     }
 }
+
+Icon.propTypes = {
+    nightmode: PropTypes.bool,
+    onClick: PropTypes.func,
+    logo: PropTypes.string,
+    url: PropTypes.string
+}
+
+export default Icon;
