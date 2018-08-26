@@ -1,4 +1,7 @@
 {
+  "rules": {
+    "react/no-unescaped-entities": "off"
+  },
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module",
@@ -6,9 +9,12 @@
       "jsx": true
     }
   },
-  "globals": {
-    "window": false,
-    "document": false
+  "env":{
+    "browser": true,
+    "node": true
   },
-  "extends": "eslint:recommended"
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ]
 }
