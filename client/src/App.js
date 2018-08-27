@@ -111,9 +111,9 @@ const AppContent = styled.div`
   color: ${props => props.theme.textColor};
   position: relative;
   margin: auto;
-  margin-top: ${props => (props.init ? '30vh' : '10vh')};
+  margin-top: ${props => (props.init ? '12vh' : '10vh')};
   opacity: ${props => (props.init ? '0' : '1')};
-  transition: 1s;
+  transition: 0.5s 0.5s;
   margin-bottom: 10vh;
   min-width: 200px;
   max-width: 400px;
