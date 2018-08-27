@@ -113,15 +113,15 @@ const AppContent = styled.div`
   margin: auto;
   margin-top: ${props => (props.init ? '12vh' : '10vh')};
   opacity: ${props => (props.init ? '0' : '1')};
-  transition: 0.5s 0.5s;
+  transition: ${props => (props.init ? '0.5s 0.5s' : '0.5s')};
   margin-bottom: 10vh;
   min-width: 200px;
   max-width: 400px;
   height: 200px;
   background-color: ${props => props.theme.bgColor};
   border-radius: 1.5rem;
-  border: 10px solid ${props => props.theme.backdropColor};
   padding: 50px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 export default App;
