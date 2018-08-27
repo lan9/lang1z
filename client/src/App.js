@@ -7,6 +7,7 @@ import moonIcon from './images/moon.svg';
 import registerServiceWorker from './registerServiceWorker';
 import Icon from './Icon';
 import styled, { ThemeProvider } from 'styled-components';
+import Transition from 'react-transition-group/Transition';
 
 class App extends Component {
   constructor(props, context) {
@@ -14,10 +15,12 @@ class App extends Component {
     this.state = {
       width: undefined,
       height: undefined,
-      nightmode: false
+      nightmode: false,
+      show: true
     };
     this._toggleNightMode = this._toggleNightMode.bind(this);
     this._updateDimensions = this._updateDimensions.bind(this);
+    this._renderContent = this._renderContent.bind(this);
   }
 
   _toggleNightMode() {
@@ -49,26 +52,46 @@ class App extends Component {
     window.removeEventListener('resize', this._updateDimensions);
   }
 
+  _renderContent(init) {
+    const { nightmode } = this.state;
+    const nightmodeIcon = nightmode ? sunIcon : moonIcon;
+
+    return (
+      <AppContent init={init}>
+        <div className="App-title">Hello I'm Yuze.</div>
+        I'm a software engineer at Twitter.
+        <div className="App-bottom-bar">
+          <Icon url="https://twitter.com/lang1z" logo={twitterLogo} />
+          <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo} />
+          <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode} />
+        </div>
+      </AppContent>
+    );
+  }
+
   render() {
     //const wideMode = window.innerWidth > 500;
-    const { nightmode } = this.state;
-    const nightmodeIcon = nightmode ? moonIcon : sunIcon;
-
+    const { nightmode, show } = this.state;
     const theme = nightmode
       ? { backdropColor: 'black', bgColor: 'darkgray', textColor: 'black' }
       : { backdropColor: 'darkgray', bgColor: 'white', textColor: 'black' };
     return (
       <ThemeProvider theme={theme}>
         <Backdrop>
-          <AppContent>
-            <div className="App-title">Hello I'm Yuze.</div>
-            I'm a software engineer at Twitter.
-            <div className="App-bottom-bar">
-              <Icon url="https://twitter.com/lang1z" logo={twitterLogo} />
-              <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo} />
-              <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode} />
-            </div>
-          </AppContent>
+          <Transition in={show} timeout={1000} mountOnEnter unmountOnExit appear={true}>
+            {state => {
+              switch (state) {
+                case 'entering':
+                  return this._renderContent(true);
+                case 'entered':
+                  return this._renderContent(false);
+                case 'exiting':
+                  return 'Exiting...';
+                case 'exited':
+                  return 'exited';
+              }
+            }}
+          </Transition>
         </Backdrop>
       </ThemeProvider>
     );
@@ -89,7 +112,8 @@ const AppContent = styled.div`
   color: ${props => props.theme.textColor};
   position: relative;
   margin: auto;
-  margin-top: 10vh;
+  margin-top: ${props => (props.init ? '110vh' : '10vh')};
+  transition: 1s;
   margin-bottom: 10vh;
   min-width: 200px;
   max-width: 400px;
