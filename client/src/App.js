@@ -78,17 +78,15 @@ class App extends Component {
     return (
       <ThemeProvider theme={theme}>
         <Backdrop>
-          <Transition in={show} timeout={1000} mountOnEnter unmountOnExit appear={true}>
+          <Transition in={show} timeout={0} mountOnEnter unmountOnExit appear={true}>
             {state => {
               switch (state) {
                 case 'entering':
                   return this._renderContent(true);
                 case 'entered':
-                  return this._renderContent(false);
                 case 'exiting':
-                  return 'Exiting...';
                 case 'exited':
-                  return 'exited';
+                  return this._renderContent(false);
               }
             }}
           </Transition>
@@ -106,13 +104,15 @@ const Backdrop = styled.div`
   top:        0; 
   left:       0; 
   position:   fixed; 
+  transition: 1s;
 }
 `;
 const AppContent = styled.div`
   color: ${props => props.theme.textColor};
   position: relative;
   margin: auto;
-  margin-top: ${props => (props.init ? '110vh' : '10vh')};
+  margin-top: ${props => (props.init ? '30vh' : '10vh')};
+  opacity: ${props => (props.init ? '0' : '1')};
   transition: 1s;
   margin-bottom: 10vh;
   min-width: 200px;
