@@ -8,6 +8,7 @@ import registerServiceWorker from './registerServiceWorker';
 import Icon from './Icon';
 import styled, { ThemeProvider } from 'styled-components';
 import Transition from 'react-transition-group/Transition';
+import { connect } from 'react-redux';
 
 class App extends Component {
   constructor(props, context) {
@@ -15,7 +16,6 @@ class App extends Component {
     this.state = {
       width: undefined,
       height: undefined,
-      nightmode: false,
       show: true
     };
     this._toggleNightMode = this._toggleNightMode.bind(this);
@@ -24,8 +24,8 @@ class App extends Component {
   }
 
   _toggleNightMode() {
-    const { nightmode } = this.state;
-    this.setState({ nightmode: !nightmode });
+    const { toggleNightmode } = this.props;
+    toggleNightmode();
   }
 
   _updateDimensions() {
@@ -53,7 +53,7 @@ class App extends Component {
   }
 
   _renderContent(init) {
-    const { nightmode } = this.state;
+    const { nightmode } = this.props;
     const nightmodeIcon = nightmode ? sunIcon : moonIcon;
 
     return (
@@ -71,7 +71,8 @@ class App extends Component {
 
   render() {
     //const wideMode = window.innerWidth > 500;
-    const { nightmode, show } = this.state;
+    const { show } = this.state;
+    const { nightmode } = this.props;
     const theme = nightmode
       ? { backdropColor: 'black', bgColor: 'darkgray', textColor: 'black' }
       : { backdropColor: 'darkgray', bgColor: 'white', textColor: 'black' };
@@ -124,4 +125,21 @@ const AppContent = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
-export default App;
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleNightmode: () => {
+      dispatch({ type: 'TOGGLE_NIGHTMODE' });
+    }
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    nightmode: state.nightmode
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
