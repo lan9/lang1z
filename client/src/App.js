@@ -56,17 +56,15 @@ class App extends Component {
     const { nightmode } = this.props;
     const nightmodeIcon = nightmode ? sunIcon : moonIcon;
 
-    return (
-      <AppContent init={init}>
-        <div className="App-title">Hello I'm Yuze.</div>
-        I'm a software engineer at Twitter.
+    return <AppContent init={init}>
+        <div className="App-title">{"Hello I'm Yuze."}</div>
+        {"I'm a software engineer at Twitter."}
         <div className="App-bottom-bar">
           <Icon url="https://twitter.com/lang1z" logo={twitterLogo} />
           <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo} />
           <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode} />
         </div>
-      </AppContent>
-    );
+      </AppContent>;
   }
 
   render() {
