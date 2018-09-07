@@ -5,6 +5,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { loadState, saveState } from './localStorage';
 
 const createReducer = (initialState, actionHandlers) => {
   return (state = initialState, action) => {
@@ -17,13 +18,14 @@ const createReducer = (initialState, actionHandlers) => {
 };
 
 const actionHandlers = {
-  TOGGLE_NIGHTMODE: (state, action) => {
+  TOGGLE_NIGHTMODE: (state, action) => { // eslint-disable-line no-unused-vars
     return { ...state, nightmode: !state.nightmode };
   }
 };
 const reducers = createReducer({}, actionHandlers);
 
-const store = createStore(reducers);
+const store = createStore(reducers, loadState());
+store.subscribe(() => saveState(store.getState()));
 
 ReactDOM.render(
   <Provider store={store}>
