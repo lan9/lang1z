@@ -60,10 +60,10 @@ class App extends Component {
 
     return (
       <CardDeck>
-        <Card init={init} top={'1rem'} opacity={0.5}>
+        <Card id={1} init={init} top={'1rem'} opacity={0.5}>
           {'aa'}
         </Card>
-        <Card init={init}>
+        <Card id={0} init={init}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
           {"I'm a software engineer at Twitter."}
           <div className="App-bottom-bar">

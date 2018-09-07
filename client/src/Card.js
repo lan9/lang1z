@@ -17,12 +17,14 @@ Card.propTypes = {
   bgColor: PropTypes.string
 };
 const StyledDiv = styled.div`
+  left: 50%;
+  transform: translateX(-50%);
   position: absolute;
   color: ${props => props.theme.textColor};
   opacity: ${props => (props.init ? '0' : '1')};
   transition: 0.5s 0.3s;
   height: 200px;
-  width: 100%;
+  width: ${props => `${100 - 3 * (props.id || 0)}%`};
   top: ${props => (props.top === undefined ? '0' : props.top)};
   opacity: ${props => (props.opacity === undefined ? 1 : props.opacity)};
   background-color: ${props => props.theme.bgColor};
