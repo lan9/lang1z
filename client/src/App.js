@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './styles/App.css';
 import twitterLogo from './images/twitter.svg';
 import linkedInLogo from './images/linkedin.svg';
@@ -9,6 +9,8 @@ import Icon from './Icon';
 import styled, { ThemeProvider } from 'styled-components';
 import Transition from 'react-transition-group/Transition';
 import { connect } from 'react-redux';
+import Card from './Card';
+import CardDeck from './CardDeck';
 
 class App extends Component {
   constructor(props, context) {
@@ -56,15 +58,22 @@ class App extends Component {
     const { nightmode } = this.props;
     const nightmodeIcon = nightmode ? sunIcon : moonIcon;
 
-    return <AppContent init={init}>
-        <div className="App-title">{"Hello I'm Yuze."}</div>
-        {"I'm a software engineer at Twitter."}
-        <div className="App-bottom-bar">
-          <Icon url="https://twitter.com/lang1z" logo={twitterLogo} />
-          <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo} />
-          <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode} />
-        </div>
-      </AppContent>;
+    return (
+      <CardDeck>
+        <Card init={init} top={'1rem'} opacity={0.5}>
+          {'aa'}
+        </Card>
+        <Card init={init}>
+          <div className="App-title">{"Hello I'm Yuze."}</div>
+          {"I'm a software engineer at Twitter."}
+          <div className="App-bottom-bar">
+            <Icon url="https://twitter.com/lang1z" logo={twitterLogo} />
+            <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo} />
+            <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode} />
+          </div>
+        </Card>
+      </CardDeck>
+    );
   }
 
   render() {
@@ -105,22 +114,6 @@ const Backdrop = styled.div`
   position:   fixed; 
   transition: 1s;
 }
-`;
-const AppContent = styled.div`
-  color: ${props => props.theme.textColor};
-  position: relative;
-  margin: auto;
-  margin-top: ${props => (props.init ? '12vh' : '10vh')};
-  opacity: ${props => (props.init ? '0' : '1')};
-  transition: 0.5s 0.3s;
-  margin-bottom: 10vh;
-  min-width: 200px;
-  max-width: 400px;
-  height: 200px;
-  background-color: ${props => props.theme.bgColor};
-  border-radius: 1.5rem;
-  padding: 50px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const mapDispatchToProps = dispatch => {
