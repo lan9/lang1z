@@ -5,6 +5,6 @@ export default styled.div`
   margin: auto;
   margin-top: ${props => (props.init ? '12vh' : '10vh')};
   margin-bottom: 10vh;
-  min-width: 300px;
-  max-width: 500px;
+  min-width: 200px;
+  max-width: 400px;
 `;
