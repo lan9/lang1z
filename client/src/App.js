@@ -6,7 +6,7 @@ import sunIcon from './images/sun.svg';
 import moonIcon from './images/moon.svg';
 import registerServiceWorker from './registerServiceWorker';
 import Icon from './Icon';
-import styled, { ThemeProvider } from 'styled-components';
+import styled, { css, ThemeProvider } from 'styled-components';
 import Transition from 'react-transition-group/Transition';
 import { connect } from 'react-redux';
 import Card from './Card';
@@ -23,6 +23,7 @@ class App extends Component {
     this._toggleNightMode = this._toggleNightMode.bind(this);
     this._updateDimensions = this._updateDimensions.bind(this);
     this._renderContent = this._renderContent.bind(this);
+    this._renderMainCardBottomBar = this._renderMainCardBottomBar(this);
   }
 
   _toggleNightMode() {
@@ -54,23 +55,31 @@ class App extends Component {
     window.removeEventListener('resize', this._updateDimensions);
   }
 
-  _renderContent(init) {
+  _renderMainCardBottomBar() {
     const { nightmode } = this.props;
     const nightmodeIcon = nightmode ? sunIcon : moonIcon;
-
     return (
-      <CardDeck>
+      <Fragment>
+        <Icon url="https://twitter.com/lang1z" logo={twitterLogo} />
+        <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo} />
+        <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode} />
+      </Fragment>
+    );
+  }
+  _renderContent(init) {
+    const widthStyle = css`
+      min-width: 200px;
+      max-width: 400px;
+    `;
+    return (
+      <CardDeck withStyle={widthStyle}>
         <Card id={1} init={init} top={'1rem'} opacity={0.5}>
           {'aa'}
         </Card>
-        <Card id={0} init={init}>
+        <Card id={0} init={init} bottomBarContent={this._renderMainCardBottomBar}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
-          {"I'm a software engineer at Twitter."}
-          <div className="App-bottom-bar">
-            <Icon url="https://twitter.com/lang1z" logo={twitterLogo} />
-            <Icon url="https://linkedin.com/in/yuzelang" logo={linkedInLogo} />
-            <Icon nightmode logo={nightmodeIcon} onClick={this._toggleNightMode} />
-          </div>
+          <p>{`I'm a software engineer. I work on Twitter's web team right now.`}</p>
+          <p>{`I'm also a untalented photographer and failing gardener.`}</p>
         </Card>
       </CardDeck>
     );
