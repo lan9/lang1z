@@ -67,13 +67,8 @@ class App extends Component {
     );
   }
   _renderContent() {
-    //TODO find a better way to add additional styles
-    const widthStyle = css`
-      min-width: 200px;
-      max-width: 400px;
-    `;
     return (
-      <CardDeck withStyle={widthStyle}>
+      <CardDeck minWidth={200} maxWidth={400}>
         <Card bottomBarContent={this._renderMainCardBottomBar()}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
           <p>{`I'm a software engineer. I work on Twitter's web team right now.`}</p>

@@ -24,7 +24,9 @@ Card.propTypes = {
   textColor: PropTypes.string,
   bgColor: PropTypes.string,
   zIndex: PropTypes.number,
-  marginBottom: PropTypes.string
+  marginBottom: PropTypes.string,
+  minWidth: PropTypes.number,
+  maxWidth: PropTypes.number
 };
 const Content = styled.div`
   bottom: ${props => (props.bottom === undefined ? 0 : props.bottom)};
@@ -34,7 +36,8 @@ const Content = styled.div`
   color: ${props => props.theme.textColor};
   transform: translate(-50%);
   transition: 0.5s 0.3s;
-  width: ${props => `${100 - 3 * (props.id || 0)}%`};
+  min-width: ${props => `${(props.minWidth || 100) * (1 - 0.03 * (props.id || 0))}px`};
+  max-width: ${props => `${(props.maxWidth || 500) * (1 - 0.03 * (props.id || 0))}px`};
   opacity: ${props => (props.opacity === undefined ? 1 : props.opacity)};
   background-color: ${props => props.theme.bgColor};
   border-radius: 1.5rem;

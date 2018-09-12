@@ -45,7 +45,7 @@ class CardDeck extends React.PureComponent {
     );
   }
   _renderContent(init) {
-    const { children } = this.props;
+    const { children, minWidth, maxWidth } = this.props;
     const { initialRendered } = this.state;
     const clonedElement = children.map((e, index) => {
       const makeAdditionalProps = index => {
@@ -61,7 +61,9 @@ class CardDeck extends React.PureComponent {
           bottom: bottomValue,
           zIndex: this._refs.length - index,
           marginBottom: initialRendered ? '0' : '1.5rem',
-          opacity: init ? 1 : 0
+          opacity: init ? 1 : 0,
+          minWidth: minWidth,
+          maxWidth: maxWidth
         };
       };
       return React.cloneElement(e, makeAdditionalProps(index));
@@ -79,8 +81,8 @@ class CardDeck extends React.PureComponent {
 }
 
 CardDeck.propTypes = {
-  init: PropTypes.bool,
-  withStyle: PropTypes.array
+  minWidth: PropTypes.number,
+  maxWidth: PropTypes.number
 };
 
 const StyledDiv = styled.div`
