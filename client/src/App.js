@@ -23,7 +23,7 @@ class App extends Component {
     this._toggleNightMode = this._toggleNightMode.bind(this);
     this._updateDimensions = this._updateDimensions.bind(this);
     this._renderContent = this._renderContent.bind(this);
-    this._renderMainCardBottomBar = this._renderMainCardBottomBar(this);
+    this._renderMainCardBottomBar = this._renderMainCardBottomBar.bind(this);
   }
 
   _toggleNightMode() {
@@ -66,21 +66,21 @@ class App extends Component {
       </Fragment>
     );
   }
-  _renderContent(init) {
+  _renderContent() {
+    //TODO find a better way to add additional styles
     const widthStyle = css`
       min-width: 200px;
       max-width: 400px;
     `;
     return (
       <CardDeck withStyle={widthStyle}>
-        <Card id={1} init={init} top={'1rem'} opacity={0.5}>
-          {'aa'}
-        </Card>
-        <Card id={0} init={init} bottomBarContent={this._renderMainCardBottomBar}>
+        <Card bottomBarContent={this._renderMainCardBottomBar()}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
           <p>{`I'm a software engineer. I work on Twitter's web team right now.`}</p>
-          <p>{`I'm also a untalented photographer and failing gardener.`}</p>
+          <p>{`I'm also a untalented photographer and failing handyman.`}</p>
         </Card>
+        <Card>{'This card is left blank intentionally.'}</Card>
+        <Card>{'This too.'}</Card>
       </CardDeck>
     );
   }
@@ -94,20 +94,7 @@ class App extends Component {
       : { backdropColor: 'darkgray', bgColor: 'white', textColor: 'black' };
     return (
       <ThemeProvider theme={theme}>
-        <Backdrop>
-          <Transition in={show} timeout={0} mountOnEnter unmountOnExit appear={true}>
-            {state => {
-              switch (state) {
-                case 'entering':
-                  return this._renderContent(true);
-                case 'entered':
-                case 'exiting':
-                case 'exited':
-                  return this._renderContent(false);
-              }
-            }}
-          </Transition>
-        </Backdrop>
+        <Backdrop>{this._renderContent()}</Backdrop>
       </ThemeProvider>
     );
   }

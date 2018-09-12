@@ -16,29 +16,32 @@ class Card extends React.PureComponent {
 
 Card.propTypes = {
   bottomBarContent: PropTypes.object,
+  bottom: PropTypes.string,
   id: PropTypes.number,
   init: PropTypes.bool,
   top: PropTypes.string,
   opacity: PropTypes.number,
   textColor: PropTypes.string,
   bgColor: PropTypes.string,
-  style: PropTypes.string
+  zIndex: PropTypes.number,
+  marginBottom: PropTypes.string
 };
 const Content = styled.div`
+  bottom: ${props => (props.bottom === undefined ? 0 : props.bottom)};
+  margin-bottom: ${props => (props.marginBottom === undefined ? '1.5rem' : props.marginBottom)};
   left: 50%;
-  transform: translateX(-50%);
-  position: absolute;
+  position: relative;
   color: ${props => props.theme.textColor};
-  opacity: ${props => (props.init ? '0' : '1')};
+  transform: translate(-50%);
   transition: 0.5s 0.3s;
   width: ${props => `${100 - 3 * (props.id || 0)}%`};
-  top: ${props => (props.top === undefined ? '0' : props.top)};
   opacity: ${props => (props.opacity === undefined ? 1 : props.opacity)};
   background-color: ${props => props.theme.bgColor};
   border-radius: 1.5rem;
   padding: 50px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  ${props => props.style};
+  z-index: ${props => (props.zIndex === undefined ? 0 : props.zIndex)};
+  };
 `;
 
 const BottomBar = styled.div`
