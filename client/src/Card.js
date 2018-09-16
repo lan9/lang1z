@@ -26,7 +26,7 @@ Card.propTypes = {
   zIndex: PropTypes.number,
   marginBottom: PropTypes.string,
   minWidth: PropTypes.number,
-  maxWidth: PropTypes.number
+  maxWidth: PropTypes.number,
 };
 const Content = styled.div`
   bottom: ${props => (props.bottom === undefined ? 0 : props.bottom)};

@@ -7,11 +7,14 @@ import Transition from 'react-transition-group/Transition';
 class CardDeck extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
-    this._setRefs = this._setRefs.bind(this);
+    this._setRef = this._setRef.bind(this);
+    this._setCardRefs = this._setCardRefs.bind(this);
     this._calcBottoms = this._calcBottoms.bind(this);
 
-    this._refs = [];
-    this._initialBottoms = [];
+    this._cardRefs = [];
+    this._cardHeights = [];
+    this._firstCardRelativeTop = undefined;
+
     this.state = {
       bottoms: [],
       initialRendered: false,
@@ -20,12 +23,22 @@ class CardDeck extends React.PureComponent {
   }
 
   componentDidMount() {
-    this._refs.forEach(ref => {
-      this._initialBottoms.push(ReactDOM.findDOMNode(ref).clientHeight);
+    this._cardRefs.forEach(ref => {
+      this._cardHeights.push(ReactDOM.findDOMNode(ref).clientHeight);
     });
 
-    console.log(this._initialBottoms);
+    const firstCardTop = ReactDOM.findDOMNode(this._cardRefs[0]).getBoundingClientRect().top
+    const parentTop = ReactDOM.findDOMNode(this._ref).getBoundingClientRect().top;
+    this._firstCardRelativeTop = firstCardTop - parentTop;
+
+
     this.setState({ initialRendered: true, bottoms: this._calcBottoms() });
+  }
+
+  componentWillUpdate(prevProps) {
+    if (prevProps.activeIndex !== this.props.activeIndex) {
+      this.setState({ bottoms: this._calcBottoms() });
+    }
   }
 
   render() {
@@ -46,22 +59,41 @@ class CardDeck extends React.PureComponent {
     );
   }
 
+  _setRef(ref) {
+    this._ref = ref;
+  }
   _calcBottoms() {
     const { activeIndex } = this.state;
 
-    const result = this._initialBottoms.slice(0);
-    result[activeIndex] = 0;
+    const result = this._cardHeights.slice(0);
 
-    for (let i = 0; i < activeIndex; i++) {}
+    let activeCardBottom = 0;
+
+    for (let i = 0; i < activeIndex; i++) {
+      activeCardBottom += this._cardHeights[i];
+    }
+
+    result[activeIndex] = activeCardBottom;
 
     for (let i = activeIndex; i < result.length - 1; i++) {
       result[i + 1] += result[i];
     }
-    for (let i = activeIndex + 1; i < result.length; i++) {
-      result[i] = Math.floor(result[i] * 0.9);
+
+    let numOfCardBelowActiveCard = result.length - activeIndex - 1;
+
+    console.log({ numOfCardBelowActiveCard, result });
+
+    for (let i = 0; i < numOfCardBelowActiveCard; i++) {
+      const cardIndex = activeIndex + i + 1;
+      result[cardIndex] = result[cardIndex] - 10 * i;
     }
 
-    console.log(result);
+    if (activeIndex - 1 >= 0) {
+      result[activeIndex - 1] = this._firstCardRelativeTop  + this._cardHeights[activeIndex -1] - 30;
+    }
+
+
+    console.log({ result });
     return result;
   }
   _renderContent(init) {
@@ -69,14 +101,14 @@ class CardDeck extends React.PureComponent {
     const { initialRendered, bottoms } = this.state;
     const clonedElement = children.map((e, index) => {
       const makeAdditionalProps = index => {
-        const refCallback = this._setRefs(index);
+        const refCallback = this._setCardRefs(index);
         const bottomValue = (bottoms[index] || 0).toString() + 'px';
         return {
           id: index,
           key: 'card_' + index.toString(),
           ref: refCallback,
           bottom: bottomValue,
-          zIndex: this._refs.length - index,
+          zIndex: this._cardRefs.length - index,
           marginBottom: initialRendered ? '0' : '1.5rem',
           opacity: init ? 1 : 0,
           minWidth: minWidth,
@@ -86,13 +118,18 @@ class CardDeck extends React.PureComponent {
       return React.cloneElement(e, makeAdditionalProps(index));
     });
 
-    return <StyledDiv {...this.props}>{clonedElement}</StyledDiv>;
+    return (
+      <StyledDiv {...this.props} ref={this._setRef}>
+        <TopBlock />
+        {clonedElement}
+      </StyledDiv>
+    );
   }
 
-  _setRefs(index) {
+  _setCardRefs(index) {
     const i = index;
     return el => {
-      this._refs[i] = el;
+      this._cardRefs[i] = el;
     };
   }
 }
@@ -105,9 +142,15 @@ CardDeck.propTypes = {
 const StyledDiv = styled.div`
   position: relative;
   margin: auto;
-  margin-top: ${props => (props.init ? '12vh' : '10vh')};
   margin-bottom: 10vh;
   ${props => props.withStyle};
 `;
+
+
+const TopBlock = styled.div`
+  position: relative;
+  margin: auto;
+  height: 10vh;
+ `;
 
 export default CardDeck;
