@@ -8,23 +8,23 @@ class CardDeck extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this._setRefs = this._setRefs.bind(this);
+    this._calcBottoms = this._calcBottoms.bind(this);
+
     this._refs = [];
-    this._bottoms = [];
+    this._initialBottoms = [];
     this.state = {
-      initialRendered: false
+      bottoms: [],
+      initialRendered: false,
+      activeIndex: 0
     };
   }
 
   componentDidMount() {
     this._refs.forEach(ref => {
-      this._bottoms.push(ReactDOM.findDOMNode(ref).clientHeight);
+      this._initialBottoms.push(ReactDOM.findDOMNode(ref).clientHeight);
     });
-    for (let i = 1; i < this._bottoms.length; i++) {
-      for (let j = i + 1; j < this._bottoms.length; j++) {
-        this._bottoms[j] += this._bottoms[i];
-      }
-    }
-    this.setState({ initialRendered: true });
+
+    this.setState({ initialRendered: true, bottoms: this._calcBottoms() });
   }
 
   render() {
@@ -44,16 +44,32 @@ class CardDeck extends React.PureComponent {
       </Transition>
     );
   }
+
+  _calcBottoms() {
+    const { activeIndex } = this.state;
+
+    const result = this._initialBottoms.slice(0);
+    result[activeIndex] = 0;
+
+    for (let i = activeIndex + 1; i < result.length; i++) {
+      for (let j = i + 1; j < result.length; j++) {
+        result[j] += result[i];
+      }
+    }
+
+    for (let i = activeIndex + 1; i < result.length; i++) {
+      result[i] = Math.floor(result[i] * 0.9);
+    }
+
+    return result;
+  }
   _renderContent(init) {
     const { children, minWidth, maxWidth } = this.props;
-    const { initialRendered } = this.state;
+    const { initialRendered, bottoms } = this.state;
     const clonedElement = children.map((e, index) => {
       const makeAdditionalProps = index => {
         const refCallback = this._setRefs(index);
-        const bottomValue =
-          index === 0 || this._bottoms[index] === undefined
-            ? '0'
-            : Math.floor(this._bottoms[index] * 0.9).toString() + 'px';
+        const bottomValue = (bottoms[index] || 0).toString() + 'px';
         return {
           id: index,
           key: 'card_' + index.toString(),
