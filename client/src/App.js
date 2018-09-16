@@ -6,8 +6,7 @@ import sunIcon from './images/sun.svg';
 import moonIcon from './images/moon.svg';
 import registerServiceWorker from './registerServiceWorker';
 import Icon from './Icon';
-import styled, { css, ThemeProvider } from 'styled-components';
-import Transition from 'react-transition-group/Transition';
+import styled, { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 import Card from './Card';
 import CardDeck from './CardDeck';
@@ -17,8 +16,7 @@ class App extends Component {
     super(props, context);
     this.state = {
       width: undefined,
-      height: undefined,
-      show: true
+      height: undefined
     };
     this._toggleNightMode = this._toggleNightMode.bind(this);
     this._updateDimensions = this._updateDimensions.bind(this);
@@ -71,8 +69,8 @@ class App extends Component {
       <CardDeck minWidth={200} maxWidth={400}>
         <Card bottomBarContent={this._renderMainCardBottomBar()}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
-          <p>{`I'm a software engineer. I work on Twitter's web team right now.`}</p>
-          <p>{`I'm also a untalented photographer and failing handyman.`}</p>
+          <p>{`I'm a software engineer on Twitter's web team`}</p>
+          <p>{`Also a wannabe photographer and failing handyperson.`}</p>
         </Card>
         <Card>{'This card is left blank intentionally.'}</Card>
         <Card>{'This too.'}</Card>
@@ -82,7 +80,6 @@ class App extends Component {
 
   render() {
     //const wideMode = window.innerWidth > 500;
-    const { show } = this.state;
     const { nightmode } = this.props;
     const theme = nightmode
       ? { backdropColor: 'black', bgColor: 'darkgray', textColor: 'black' }
