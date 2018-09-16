@@ -74,6 +74,9 @@ class App extends Component {
         </Card>
         <Card>{'This card is left blank intentionally.'}</Card>
         <Card>{'This too.'}</Card>
+        <Card>{'This too.'}</Card>
+        <Card>{'This too.'}</Card>
+        <Card>{'This too.'}</Card>
       </CardDeck>
     );
   }

@@ -24,6 +24,7 @@ class CardDeck extends React.PureComponent {
       this._initialBottoms.push(ReactDOM.findDOMNode(ref).clientHeight);
     });
 
+    console.log(this._initialBottoms);
     this.setState({ initialRendered: true, bottoms: this._calcBottoms() });
   }
 
@@ -51,16 +52,16 @@ class CardDeck extends React.PureComponent {
     const result = this._initialBottoms.slice(0);
     result[activeIndex] = 0;
 
-    for (let i = activeIndex + 1; i < result.length; i++) {
-      for (let j = i + 1; j < result.length; j++) {
-        result[j] += result[i];
-      }
-    }
+    for (let i = 0; i < activeIndex; i++) {}
 
+    for (let i = activeIndex; i < result.length - 1; i++) {
+      result[i + 1] += result[i];
+    }
     for (let i = activeIndex + 1; i < result.length; i++) {
       result[i] = Math.floor(result[i] * 0.9);
     }
 
+    console.log(result);
     return result;
   }
   _renderContent(init) {
