@@ -82,7 +82,7 @@ class CardDeck extends React.PureComponent {
 
     for (let i = 0; i < numOfCardBelowActiveCard; i++) {
       const cardIndex = activeIndex + i + 1;
-      result[cardIndex] = result[cardIndex] - 10 * i;
+      result[cardIndex] = result[cardIndex] - 10 * (i + 1);
     }
 
     if (activeIndex - 1 >= 0) {
@@ -139,7 +139,6 @@ const StyledDiv = styled.div`
   position: relative;
   margin: auto;
   margin-bottom: 10vh;
-  ${props => props.withStyle};
 `;
 
 const TopBlock = styled.div`
