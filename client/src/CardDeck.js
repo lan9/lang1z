@@ -27,12 +27,11 @@ class CardDeck extends React.PureComponent {
       this._cardHeights.push(ReactDOM.findDOMNode(ref).clientHeight);
     });
 
-    const firstCardTop = ReactDOM.findDOMNode(this._cardRefs[0]).getBoundingClientRect().top
+    const firstCardTop = ReactDOM.findDOMNode(this._cardRefs[0]).getBoundingClientRect().top;
     const parentTop = ReactDOM.findDOMNode(this._ref).getBoundingClientRect().top;
     this._firstCardRelativeTop = firstCardTop - parentTop;
 
-
-    this.setState({ initialRendered: true, bottoms: this._calcBottoms() });
+    this.setState({ initialRendered: true, bottoms: this._calcBottoms(0) });
   }
 
   componentWillUpdate(prevProps) {
@@ -62,9 +61,7 @@ class CardDeck extends React.PureComponent {
   _setRef(ref) {
     this._ref = ref;
   }
-  _calcBottoms() {
-    const { activeIndex } = this.state;
-
+  _calcBottoms(activeIndex) {
     const result = this._cardHeights.slice(0);
 
     let activeCardBottom = 0;
@@ -89,9 +86,8 @@ class CardDeck extends React.PureComponent {
     }
 
     if (activeIndex - 1 >= 0) {
-      result[activeIndex - 1] = this._firstCardRelativeTop  + this._cardHeights[activeIndex -1] - 30;
+      result[activeIndex - 1] = this._firstCardRelativeTop + this._cardHeights[activeIndex - 1] - 30;
     }
-
 
     console.log({ result });
     return result;
@@ -146,11 +142,10 @@ const StyledDiv = styled.div`
   ${props => props.withStyle};
 `;
 
-
 const TopBlock = styled.div`
   position: relative;
   margin: auto;
   height: 10vh;
- `;
+`;
 
 export default CardDeck;
