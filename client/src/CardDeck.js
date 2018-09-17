@@ -11,6 +11,7 @@ class CardDeck extends React.PureComponent {
     this._setCardRefs = this._setCardRefs.bind(this);
     this._calcBottoms = this._calcBottoms.bind(this);
     this._generateCardWidth = this._generateCardWidth.bind(this);
+    this._setActiveIndex = this._setActiveIndex.bind(this);
 
     this._cardRefs = [];
     this._cardHeights = [];
@@ -72,7 +73,6 @@ class CardDeck extends React.PureComponent {
 
     result[activeIndex] = activeCardBottom;
 
-    console.log('parentHeight = ' + this._parentHeight);
     for (let i = 0; i < activeIndex; i++) {
       // these cards are 'absolute' positioned
       result[i] = this._parentHeight;
@@ -90,19 +90,20 @@ class CardDeck extends React.PureComponent {
 
     let numOfCardBelowActiveCard = result.length - activeIndex - 1;
 
-    console.log({ numOfCardBelowActiveCard, result });
-
     for (let i = 0; i < numOfCardBelowActiveCard; i++) {
       const cardIndex = activeIndex + i + 1;
       result[cardIndex] = result[cardIndex] - 10 * (i + 1);
     }
 
-    console.log({ result });
     return result;
   }
 
   _generateCardWidth(width, positionAfterActiveCard) {
     return positionAfterActiveCard > 0 ? width * (1 - 0.03 * (positionAfterActiveCard || 0)) : width;
+  }
+
+  _setActiveIndex(index) {
+    this.setState({ activeIndex: index, bottoms: this._calcBottoms(index) });
   }
 
   _renderContent(init) {
@@ -124,7 +125,8 @@ class CardDeck extends React.PureComponent {
             opacity: init ? 1 : 0,
             minWidth: this._generateCardWidth(minWidth, index - activeIndex),
             maxWidth: this._generateCardWidth(maxWidth, index - activeIndex),
-            position: cardAboveActiveCard ? 'absolute' : 'relative'
+            position: cardAboveActiveCard ? 'absolute' : 'relative',
+            onClick: ()=> {console.log({index}); this._setActiveIndex(index)}
           };
         };
         return React.cloneElement(e, makeAdditionalProps(index));
