@@ -121,7 +121,6 @@ class CardDeck extends React.PureComponent {
             maxWidth: this._generateCardWidth(maxWidth, index - activeIndex),
             position: 'absolute',
             onClick: () => {
-              console.log({ index });
               this._setActiveIndex(index);
             }
           };
