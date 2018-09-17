@@ -19,7 +19,7 @@ class CardDeck extends React.PureComponent {
     this.state = {
       bottoms: [],
       initialRendered: false,
-      activeIndex: 2
+      activeIndex: this.props.initialActiveIndex
     };
   }
 
@@ -30,7 +30,6 @@ class CardDeck extends React.PureComponent {
     });
 
     this._parentHeight = ReactDOM.findDOMNode(this._ref).getBoundingClientRect().height;
-
 
     this.setState({ initialRendered: true, bottoms: this._calcBottoms(activeIndex) });
   }
@@ -73,10 +72,10 @@ class CardDeck extends React.PureComponent {
 
     result[activeIndex] = activeCardBottom;
 
-    console.log("parentHeight = " + this._parentHeight)
+    console.log('parentHeight = ' + this._parentHeight);
     for (let i = 0; i < activeIndex; i++) {
       // these cards are 'absolute' positioned
-      result[i] =  this._parentHeight ;
+      result[i] = this._parentHeight;
     }
 
     if (activeIndex - 1 >= 0) {
@@ -107,7 +106,6 @@ class CardDeck extends React.PureComponent {
   }
 
   _renderContent(init) {
-
     const { children, minWidth, maxWidth } = this.props;
     const { activeIndex, initialRendered, bottoms } = this.state;
     const clonedElement = children
@@ -149,6 +147,7 @@ class CardDeck extends React.PureComponent {
 }
 
 CardDeck.propTypes = {
+  initialActiveIndex: PropTypes.number,
   minWidth: PropTypes.number,
   maxWidth: PropTypes.number
 };

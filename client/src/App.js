@@ -66,7 +66,7 @@ class App extends Component {
   }
   _renderContent() {
     return (
-      <CardDeck minWidth={200} maxWidth={400}>
+      <CardDeck minWidth={200} maxWidth={400} initialActiveIndex={3}>
         <Card bottomBarContent={this._renderMainCardBottomBar()}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
           <p>{`I'm a software engineer on Twitter's web team`}</p>
