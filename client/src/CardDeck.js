@@ -63,8 +63,9 @@ class CardDeck extends React.PureComponent {
     this._ref = ref;
   }
   _calcBottoms(activeIndex) {
-    const result = this._cardHeights.slice(0);
-
+    const { topPadding } = this.props;
+    const numOfCards = this._cardHeights.length;
+    const result = [];
     let activeCardBottom = 0;
 
     for (let i = 0; i < activeIndex; i++) {
@@ -74,25 +75,19 @@ class CardDeck extends React.PureComponent {
     result[activeIndex] = activeCardBottom;
 
     for (let i = 0; i < activeIndex; i++) {
-      // these cards are 'absolute' positioned
-      result[i] = this._parentHeight;
+      // these cards are above view port
+      result[i] = this._parentHeight + 100;
     }
 
     if (activeIndex - 1 >= 0) {
-      // this card, is 'absolute' position, that sticks out of the top of the parent component
+      // this card that sticks out of the top of the parent component
       result[activeIndex - 1] = this._parentHeight - 30;
     }
 
-    for (let i = activeIndex + 1; i < result.length - 1; i++) {
-      // these card are 'relative' positioned
-      result[i + 1] += result[i];
-    }
+    result[activeIndex] = this._parentHeight - topPadding - this._cardHeights[activeIndex];
 
-    let numOfCardBelowActiveCard = result.length - activeIndex - 1;
-
-    for (let i = 0; i < numOfCardBelowActiveCard; i++) {
-      const cardIndex = activeIndex + i + 1;
-      result[cardIndex] = result[cardIndex] - 10 * (i + 1);
+    for (let i = activeIndex + 1; i < numOfCards; i++) {
+      result[i] = result[i - 1] - 10;
     }
 
     return result;
@@ -114,7 +109,6 @@ class CardDeck extends React.PureComponent {
         const makeAdditionalProps = index => {
           const refCallback = this._setCardRefs(index);
           const bottomValue = (bottoms[index] || 0).toString() + 'px';
-          const cardAboveActiveCard = index < activeIndex;
           return {
             id: index,
             key: 'card_' + index.toString(),
@@ -125,8 +119,11 @@ class CardDeck extends React.PureComponent {
             opacity: init ? 1 : 0,
             minWidth: this._generateCardWidth(minWidth, index - activeIndex),
             maxWidth: this._generateCardWidth(maxWidth, index - activeIndex),
-            position: cardAboveActiveCard ? 'absolute' : 'relative',
-            onClick: ()=> {console.log({index}); this._setActiveIndex(index)}
+            position: 'absolute',
+            onClick: () => {
+              console.log({ index });
+              this._setActiveIndex(index);
+            }
           };
         };
         return React.cloneElement(e, makeAdditionalProps(index));
@@ -134,7 +131,6 @@ class CardDeck extends React.PureComponent {
       .filter(e => !!e);
     return (
       <StyledDiv {...this.props} ref={this._setRef}>
-        <TopBlock />
         {clonedElement}
       </StyledDiv>
     );
@@ -151,7 +147,16 @@ class CardDeck extends React.PureComponent {
 CardDeck.propTypes = {
   initialActiveIndex: PropTypes.number,
   minWidth: PropTypes.number,
-  maxWidth: PropTypes.number
+  maxWidth: PropTypes.number,
+  topPadding: PropTypes.number,
+  stackOffset: PropTypes.number,
+  stackHoverOffset: PropTypes.number
+};
+
+CardDeck.defaultProps = {
+  topPadding: 100,
+  stackOffset: 10,
+  stackHoverOffset: 30
 };
 
 const StyledDiv = styled.div`
@@ -159,12 +164,6 @@ const StyledDiv = styled.div`
   margin: auto;
   margin-bottom: 10vh;
   height: 100vh;
-`;
-
-const TopBlock = styled.div`
-  position: relative;
-  margin: auto;
-  height: 10vh;
 `;
 
 export default CardDeck;

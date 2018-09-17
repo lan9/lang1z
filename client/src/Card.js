@@ -32,6 +32,7 @@ Card.propTypes = {
 const Content = styled.div`
   bottom: ${props => (props.bottom === undefined ? 0 : props.bottom)};
   margin-bottom: ${props => (props.marginBottom === undefined ? '1.5rem' : props.marginBottom)};
+  width: 100%;
   left: 50%;
   position: ${props => (props.position ? props.position : 'relative')};
   color: ${props => props.theme.textColor};
