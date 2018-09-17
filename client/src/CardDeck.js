@@ -102,7 +102,7 @@ class CardDeck extends React.PureComponent {
   }
 
   _renderContent(init) {
-    const { children, minWidth, maxWidth } = this.props;
+    const { children, minWidth, maxWidth, initialActiveIndex } = this.props;
     const { activeIndex, initialRendered, bottoms } = this.state;
     const clonedElement = children
       .map((e, index) => {
@@ -121,7 +121,7 @@ class CardDeck extends React.PureComponent {
             maxWidth: this._generateCardWidth(maxWidth, index - activeIndex),
             position: 'absolute',
             onClick: () => {
-              this._setActiveIndex(index);
+              this._setActiveIndex(index === activeIndex - 1 ? initialActiveIndex : index);
             }
           };
         };
