@@ -138,9 +138,11 @@ class CardDeck extends React.PureComponent {
       })
       .filter(e => !!e);
     return (
-      <StyledDiv {...this.props} ref={this._setRef}>
-        {clonedElement}
-      </StyledDiv>
+      <Container {...this.props}>
+        <StyledDiv {...this.props} ref={this._setRef}>
+          {clonedElement}
+        </StyledDiv>
+      </Container>
     );
   }
 
@@ -168,14 +170,19 @@ CardDeck.defaultProps = {
   padding: 50
 };
 
+const Container = styled.div`
+  position: relative;
+  margin: auto;
+  // maxWidth is the width of Card. So need to include padding here.
+  max-width: ${props => `${props.maxWidth + props.padding * 2}px`};
+  min-width: ${props => `${props.minWidth + props.padding * 2}px`};
+`;
 const StyledDiv = styled.div`
   position: relative;
   margin: auto;
   margin-bottom: 10vh;
   height: 100vh;
-  // maxWidth is the width of Card. So need to include padding here.
-  max-width: ${props => `${props.maxWidth + props.padding * 2}px`};
-  min-width: ${props => `${props.minWidth + props.padding * 2}px`};
+
   margin: 10px;
 `;
 
