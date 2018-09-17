@@ -20,25 +20,19 @@ class CardDeck extends React.PureComponent {
     this.state = {
       bottoms: [],
       initialRendered: false,
-      activeIndex: this.props.initialActiveIndex
+      activeIndex: this.props.initialActiveIndex,
+      hoveredCards: new Set([])
     };
   }
 
   componentDidMount() {
-    const { activeIndex } = this.state;
     this._cardRefs.forEach(ref => {
       this._cardHeights.push(ReactDOM.findDOMNode(ref).clientHeight);
     });
 
     this._parentHeight = ReactDOM.findDOMNode(this._ref).getBoundingClientRect().height;
 
-    this.setState({ initialRendered: true, bottoms: this._calcBottoms(activeIndex) });
-  }
-
-  componentWillUpdate(prevProps) {
-    if (prevProps.activeIndex !== this.props.activeIndex) {
-      this.setState({ bottoms: this._calcBottoms() });
-    }
+    this.setState({ initialRendered: true });
   }
 
   render() {
@@ -63,7 +57,9 @@ class CardDeck extends React.PureComponent {
     this._ref = ref;
   }
   _calcBottoms(activeIndex) {
-    const { topPadding } = this.props;
+    const { topPadding, stackOffset, stackHoverOffset } = this.props;
+    const { hoveredCards } = this.state;
+
     const numOfCards = this._cardHeights.length;
     const result = [];
     let activeCardBottom = 0;
@@ -86,8 +82,9 @@ class CardDeck extends React.PureComponent {
 
     result[activeIndex] = this._parentHeight - topPadding - this._cardHeights[activeIndex];
 
+    const shouldUseHoverOffset = Array.from(hoveredCards).filter(v => v > activeIndex).length > 0;
     for (let i = activeIndex + 1; i < numOfCards; i++) {
-      result[i] = result[i - 1] - 10;
+      result[i] = result[i - 1] - (shouldUseHoverOffset ? stackHoverOffset : stackOffset);
     }
 
     return result;
@@ -98,12 +95,14 @@ class CardDeck extends React.PureComponent {
   }
 
   _setActiveIndex(index) {
-    this.setState({ activeIndex: index, bottoms: this._calcBottoms(index) });
+    this.setState({ activeIndex: index });
   }
 
   _renderContent(init) {
     const { children, minWidth, maxWidth, initialActiveIndex } = this.props;
-    const { activeIndex, initialRendered, bottoms } = this.state;
+    const { activeIndex, initialRendered, hoveredCards } = this.state;
+
+    const bottoms = this._calcBottoms(activeIndex);
     const clonedElement = children
       .map((e, index) => {
         const makeAdditionalProps = index => {
@@ -122,6 +121,16 @@ class CardDeck extends React.PureComponent {
             position: 'absolute',
             onClick: () => {
               this._setActiveIndex(index === activeIndex - 1 ? initialActiveIndex : index);
+            },
+            onMouseOver: () => {
+              const clonedSet = new Set(hoveredCards);
+              clonedSet.add(index);
+              this.setState({ hoveredCards: clonedSet });
+            },
+            onMouseLeave: () => {
+              const clonedSet = new Set(hoveredCards);
+              clonedSet.delete(index);
+              this.setState({ hoveredCards: clonedSet });
             }
           };
         };

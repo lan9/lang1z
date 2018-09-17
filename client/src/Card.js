@@ -49,7 +49,7 @@ const Content = styled.div`
   position: ${props => props.position};
   color: ${props => props.theme.textColor};
   transform: translate(-50%);
-  transition: 0.5s 0.3s;
+  transition: 0.5s;
   min-width: ${props => `${props.minWidth}px`};
   max-width: ${props => `${props.maxWidth}px`};
   min-height: 150px;
