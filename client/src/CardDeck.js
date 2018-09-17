@@ -167,6 +167,7 @@ const StyledDiv = styled.div`
   // maxWidth is the width of Card. So need to include padding here.
   max-width: ${props => `${props.maxWidth + props.padding * 2}px`};
   min-width: ${props => `${props.minWidth + props.padding * 2}px`};
+  margin: 10px;
 `;
 
 export default CardDeck;
