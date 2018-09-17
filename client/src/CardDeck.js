@@ -108,7 +108,7 @@ class CardDeck extends React.PureComponent {
       .map((e, index) => {
         const makeAdditionalProps = index => {
           const refCallback = this._setCardRefs(index);
-          const bottomValue = (bottoms[index] || 0).toString() + 'px';
+          const bottomValue = bottoms[index] || 0;
           return {
             id: index,
             key: 'card_' + index.toString(),
@@ -163,6 +163,8 @@ const StyledDiv = styled.div`
   margin: auto;
   margin-bottom: 10vh;
   height: 100vh;
+  max-width: ${props => `${props.maxWidth}px`};
+  min-width: ${props => `${props.minWidth}px`};
 `;
 
 export default CardDeck;

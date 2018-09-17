@@ -16,7 +16,7 @@ class Card extends React.PureComponent {
 
 Card.propTypes = {
   bottomBarContent: PropTypes.object,
-  bottom: PropTypes.string,
+  bottom: PropTypes.number,
   id: PropTypes.number,
   init: PropTypes.bool,
   top: PropTypes.string,
@@ -27,26 +27,37 @@ Card.propTypes = {
   marginBottom: PropTypes.string,
   minWidth: PropTypes.number,
   maxWidth: PropTypes.number,
-  position: PropTypes.string
+  position: PropTypes.string,
+  padding: PropTypes.number
+};
+
+Card.defaultProps = {
+  minWidth: 100,
+  maxWidth: 500,
+  padding: 50,
+  position: 'relative',
+  marginBottom: '20',
+  bottom: 0,
+  opacity: 1,
+  zIndex: 0
 };
 const Content = styled.div`
-  bottom: ${props => (props.bottom === undefined ? 0 : props.bottom)};
-  margin-bottom: ${props => (props.marginBottom === undefined ? '1.5rem' : props.marginBottom)};
-  width: 100%;
+  bottom: ${props => `${props.bottom}px`};
+  margin-bottom: ${props => `${props.marginBottom}px`};
   left: 50%;
-  position: ${props => (props.position ? props.position : 'relative')};
+  position: ${props => props.position};
   color: ${props => props.theme.textColor};
   transform: translate(-50%);
   transition: 0.5s 0.3s;
-  min-width: ${props => `${props.minWidth || 100}px`};
-  max-width: ${props => `${props.maxWidth || 500}px`};
+  min-width: ${props => `${props.minWidth}px`};
+  max-width: ${props => `${props.maxWidth}px`};
   min-height: 150px;
-  opacity: ${props => (props.opacity === undefined ? 1 : props.opacity)};
+  opacity: ${props => props.opacity};
   background-color: ${props => props.theme.bgColor};
   border-radius: 1.5rem;
   padding: 50px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index: ${props => (props.zIndex === undefined ? 0 : props.zIndex)};
+  z-index: ${props => props.zIndex};
   };
 `;
 

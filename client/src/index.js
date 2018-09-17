@@ -18,8 +18,9 @@ const createReducer = (initialState, actionHandlers) => {
 };
 
 const actionHandlers = {
-  TOGGLE_NIGHTMODE: (state, action) => { // eslint-disable-line no-unused-vars
-    return { ...state, nightmode: !state.nightmode };
+  TOGGLE_NIGHTMODE: (state, action) => {
+    // eslint-disable-line no-unused-vars
+    return { ...state, nightmode: action.payload.mode };
   }
 };
 const reducers = createReducer({}, actionHandlers);

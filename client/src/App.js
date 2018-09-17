@@ -10,6 +10,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
 import Card from './Card';
 import CardDeck from './CardDeck';
+import PropTypes from 'prop-types';
 
 class App extends Component {
   constructor(props, context) {
@@ -25,8 +26,8 @@ class App extends Component {
   }
 
   _toggleNightMode() {
-    const { toggleNightmode } = this.props;
-    toggleNightmode();
+    const { toggleNightmode, nightmode } = this.props;
+    toggleNightmode(!nightmode);
   }
 
   _updateDimensions() {
@@ -66,7 +67,7 @@ class App extends Component {
   }
   _renderContent() {
     return (
-      <CardDeck minWidth={200} maxWidth={400} initialActiveIndex={1}>
+      <CardDeck minWidth={200} maxWidth={400} initialActiveIndex={0}>
         <Card bottomBarContent={this._renderMainCardBottomBar()}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
           <p>{`I'm a software engineer on Twitter's web team`}</p>
@@ -107,10 +108,14 @@ const Backdrop = styled.div`
 }
 `;
 
+App.propTypes = {
+  toggleNightmode: PropTypes.func,
+  nightmode: PropTypes.bool
+};
 const mapDispatchToProps = dispatch => {
   return {
-    toggleNightmode: () => {
-      dispatch({ type: 'TOGGLE_NIGHTMODE' });
+    toggleNightmode: mode => {
+      dispatch({ type: 'TOGGLE_NIGHTMODE', payload: { mode } });
     }
   };
 };
