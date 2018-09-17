@@ -10,28 +10,29 @@ class CardDeck extends React.PureComponent {
     this._setRef = this._setRef.bind(this);
     this._setCardRefs = this._setCardRefs.bind(this);
     this._calcBottoms = this._calcBottoms.bind(this);
+    this._generateCardWidth = this._generateCardWidth.bind(this);
 
     this._cardRefs = [];
     this._cardHeights = [];
-    this._firstCardRelativeTop = undefined;
+    this._parentHeight = undefined;
 
     this.state = {
       bottoms: [],
       initialRendered: false,
-      activeIndex: 0
+      activeIndex: 2
     };
   }
 
   componentDidMount() {
+    const { activeIndex } = this.state;
     this._cardRefs.forEach(ref => {
       this._cardHeights.push(ReactDOM.findDOMNode(ref).clientHeight);
     });
 
-    const firstCardTop = ReactDOM.findDOMNode(this._cardRefs[0]).getBoundingClientRect().top;
-    const parentTop = ReactDOM.findDOMNode(this._ref).getBoundingClientRect().top;
-    this._firstCardRelativeTop = firstCardTop - parentTop;
+    this._parentHeight = ReactDOM.findDOMNode(this._ref).getBoundingClientRect().height;
 
-    this.setState({ initialRendered: true, bottoms: this._calcBottoms(0) });
+
+    this.setState({ initialRendered: true, bottoms: this._calcBottoms(activeIndex) });
   }
 
   componentWillUpdate(prevProps) {
@@ -72,7 +73,19 @@ class CardDeck extends React.PureComponent {
 
     result[activeIndex] = activeCardBottom;
 
-    for (let i = activeIndex; i < result.length - 1; i++) {
+    console.log("parentHeight = " + this._parentHeight)
+    for (let i = 0; i < activeIndex; i++) {
+      // these cards are 'absolute' positioned
+      result[i] =  this._parentHeight ;
+    }
+
+    if (activeIndex - 1 >= 0) {
+      // this card, is 'absolute' position, that sticks out of the top of the parent component
+      result[activeIndex - 1] = this._parentHeight - 30;
+    }
+
+    for (let i = activeIndex + 1; i < result.length - 1; i++) {
+      // these card are 'relative' positioned
       result[i + 1] += result[i];
     }
 
@@ -85,35 +98,40 @@ class CardDeck extends React.PureComponent {
       result[cardIndex] = result[cardIndex] - 10 * (i + 1);
     }
 
-    if (activeIndex - 1 >= 0) {
-      result[activeIndex - 1] = this._firstCardRelativeTop + this._cardHeights[activeIndex - 1] - 30;
-    }
-
     console.log({ result });
     return result;
   }
-  _renderContent(init) {
-    const { children, minWidth, maxWidth } = this.props;
-    const { initialRendered, bottoms } = this.state;
-    const clonedElement = children.map((e, index) => {
-      const makeAdditionalProps = index => {
-        const refCallback = this._setCardRefs(index);
-        const bottomValue = (bottoms[index] || 0).toString() + 'px';
-        return {
-          id: index,
-          key: 'card_' + index.toString(),
-          ref: refCallback,
-          bottom: bottomValue,
-          zIndex: this._cardRefs.length - index,
-          marginBottom: initialRendered ? '0' : '1.5rem',
-          opacity: init ? 1 : 0,
-          minWidth: minWidth,
-          maxWidth: maxWidth
-        };
-      };
-      return React.cloneElement(e, makeAdditionalProps(index));
-    });
 
+  _generateCardWidth(width, positionAfterActiveCard) {
+    return positionAfterActiveCard > 0 ? width * (1 - 0.03 * (positionAfterActiveCard || 0)) : width;
+  }
+
+  _renderContent(init) {
+
+    const { children, minWidth, maxWidth } = this.props;
+    const { activeIndex, initialRendered, bottoms } = this.state;
+    const clonedElement = children
+      .map((e, index) => {
+        const makeAdditionalProps = index => {
+          const refCallback = this._setCardRefs(index);
+          const bottomValue = (bottoms[index] || 0).toString() + 'px';
+          const cardAboveActiveCard = index < activeIndex;
+          return {
+            id: index,
+            key: 'card_' + index.toString(),
+            ref: refCallback,
+            bottom: bottomValue,
+            zIndex: this._cardRefs.length - index,
+            marginBottom: initialRendered ? '0' : '1.5rem',
+            opacity: init ? 1 : 0,
+            minWidth: this._generateCardWidth(minWidth, index - activeIndex),
+            maxWidth: this._generateCardWidth(maxWidth, index - activeIndex),
+            position: cardAboveActiveCard ? 'absolute' : 'relative'
+          };
+        };
+        return React.cloneElement(e, makeAdditionalProps(index));
+      })
+      .filter(e => !!e);
     return (
       <StyledDiv {...this.props} ref={this._setRef}>
         <TopBlock />
@@ -139,6 +157,7 @@ const StyledDiv = styled.div`
   position: relative;
   margin: auto;
   margin-bottom: 10vh;
+  height: 100vh;
 `;
 
 const TopBlock = styled.div`

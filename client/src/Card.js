@@ -27,17 +27,19 @@ Card.propTypes = {
   marginBottom: PropTypes.string,
   minWidth: PropTypes.number,
   maxWidth: PropTypes.number,
+  position: PropTypes.string
 };
 const Content = styled.div`
   bottom: ${props => (props.bottom === undefined ? 0 : props.bottom)};
   margin-bottom: ${props => (props.marginBottom === undefined ? '1.5rem' : props.marginBottom)};
   left: 50%;
-  position: relative;
+  position: ${props => (props.position ? props.position : 'relative')};
   color: ${props => props.theme.textColor};
   transform: translate(-50%);
   transition: 0.5s 0.3s;
-  min-width: ${props => `${(props.minWidth || 100) * (1 - 0.03 * (props.id || 0))}px`};
-  max-width: ${props => `${(props.maxWidth || 500) * (1 - 0.03 * (props.id || 0))}px`};
+  min-width: ${props => `${props.minWidth || 100}px`};
+  max-width: ${props => `${props.maxWidth || 500}px`};
+  min-height: 150px;
   opacity: ${props => (props.opacity === undefined ? 1 : props.opacity)};
   background-color: ${props => props.theme.bgColor};
   border-radius: 1.5rem;
