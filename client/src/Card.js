@@ -44,6 +44,7 @@ Card.defaultProps = {
 const Content = styled.div`
   bottom: ${props => `${props.bottom}px`};
   margin-bottom: ${props => `${props.marginBottom}px`};
+  width: 100%;
   left: 50%;
   position: ${props => props.position};
   color: ${props => props.theme.textColor};
@@ -56,6 +57,7 @@ const Content = styled.div`
   background-color: ${props => props.theme.bgColor};
   border-radius: 1.5rem;
   padding: 50px;
+  box-sizing: border-box;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   z-index: ${props => props.zIndex};
   };

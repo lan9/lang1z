@@ -155,7 +155,8 @@ CardDeck.propTypes = {
 CardDeck.defaultProps = {
   topPadding: 100,
   stackOffset: 10,
-  stackHoverOffset: 30
+  stackHoverOffset: 30,
+  padding: 50
 };
 
 const StyledDiv = styled.div`
@@ -163,8 +164,9 @@ const StyledDiv = styled.div`
   margin: auto;
   margin-bottom: 10vh;
   height: 100vh;
-  max-width: ${props => `${props.maxWidth}px`};
-  min-width: ${props => `${props.minWidth}px`};
+  // maxWidth is the width of Card. So need to include padding here.
+  max-width: ${props => `${props.maxWidth + props.padding * 2}px`};
+  min-width: ${props => `${props.minWidth + props.padding * 2}px`};
 `;
 
 export default CardDeck;
