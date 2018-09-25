@@ -12,10 +12,12 @@ class CardDeck extends React.PureComponent {
     this._calcBottoms = this._calcBottoms.bind(this);
     this._generateCardWidth = this._generateCardWidth.bind(this);
     this._setActiveIndex = this._setActiveIndex.bind(this);
+    this._onTouchMove = this._onTouchMove.bind(this);
 
     this._cardRefs = [];
     this._cardHeights = [];
     this._parentHeight = undefined;
+    this._lastSwipeChangeY = undefined;
 
     this.state = {
       bottoms: [],
@@ -138,7 +140,14 @@ class CardDeck extends React.PureComponent {
       })
       .filter(e => !!e);
     return (
-      <Container {...this.props}>
+      <Container
+        {...this.props}
+        onTouchStart={e => {
+          this._lastSwipeChangeY = e.touches[0].screenY;
+        }}
+        onTouchMove={this._onTouchMove}
+        onTouchEnd={e => (this._lastSwipeChangeY = undefined)}
+      >
         <StyledDiv {...this.props} ref={this._setRef}>
           {clonedElement}
         </StyledDiv>
@@ -146,6 +155,29 @@ class CardDeck extends React.PureComponent {
     );
   }
 
+  _onTouchMove(e) {
+    const { children } = this.props;
+    const { activeIndex } = this.state;
+
+    // TODO move this to componentWillUpdate
+    const cardNum = children.length;
+    const cardScrollThreshold = window.innerHeight / cardNum / 2;
+
+    const newScreenY = e.changedTouches[0] && e.changedTouches[0].screenY;
+    if (newScreenY !== undefined) {
+      const delta = this._lastSwipeChangeY !== undefined ? this._lastSwipeChangeY - newScreenY : 0;
+      if (Math.abs(delta) > cardScrollThreshold) {
+        let newActiveIndex = undefined;
+        if (delta > 0) {
+          newActiveIndex = activeIndex + 1 > cardNum - 1 ? activeIndex : activeIndex + 1;
+        } else {
+          newActiveIndex = activeIndex - 1 < 0 ? 0 : activeIndex - 1;
+        }
+        this.setState({ activeIndex: newActiveIndex });
+        this._lastSwipeChangeY = newScreenY;
+      }
+    }
+  }
   _setCardRefs(index) {
     const i = index;
     return el => {
