@@ -13,6 +13,7 @@ class CardDeck extends React.PureComponent {
     this._generateCardWidth = this._generateCardWidth.bind(this);
     this._setActiveIndex = this._setActiveIndex.bind(this);
     this._onTouchMove = this._onTouchMove.bind(this);
+    this._getAdjustedSwipeOffset = this._getAdjustedSwipeOffset.bind(this);
 
     this._cardRefs = [];
     this._cardHeights = [];
@@ -23,7 +24,8 @@ class CardDeck extends React.PureComponent {
       bottoms: [],
       initialRendered: false,
       activeIndex: this.props.initialActiveIndex,
-      hoveredCards: new Set([])
+      hoveredCards: new Set([]),
+      swipeOffset: 0
     };
   }
 
@@ -58,6 +60,7 @@ class CardDeck extends React.PureComponent {
   _setRef(ref) {
     this._ref = ref;
   }
+
   _calcBottoms(activeIndex) {
     const { topPadding, stackOffset, stackHoverOffset } = this.props;
     const { hoveredCards } = this.state;
@@ -102,7 +105,7 @@ class CardDeck extends React.PureComponent {
 
   _renderContent(init) {
     const { children, minWidth, maxWidth, initialActiveIndex } = this.props;
-    const { activeIndex, initialRendered, hoveredCards } = this.state;
+    const { activeIndex, initialRendered, hoveredCards, swipeOffset } = this.state;
 
     const bottoms = this._calcBottoms(activeIndex);
     const clonedElement = children
@@ -142,11 +145,15 @@ class CardDeck extends React.PureComponent {
     return (
       <Container
         {...this.props}
+        swipeOffset={-1 * swipeOffset}
         onTouchStart={e => {
           this._lastSwipeChangeY = e.touches[0].screenY;
         }}
         onTouchMove={this._onTouchMove}
-        onTouchEnd={e => (this._lastSwipeChangeY = undefined)}
+        onTouchEnd={() => {
+          this._lastSwipeChangeY = undefined;
+          this.setState({ swipeOffset: 0 });
+        }}
       >
         <StyledDiv {...this.props} ref={this._setRef}>
           {clonedElement}
@@ -175,9 +182,17 @@ class CardDeck extends React.PureComponent {
         }
         this.setState({ activeIndex: newActiveIndex });
         this._lastSwipeChangeY = newScreenY;
+      } else {
+        this.setState({ swipeOffset: this._getAdjustedSwipeOffset(delta) });
       }
     }
   }
+
+  _getAdjustedSwipeOffset(delta) {
+    const symbol = delta < 0 ? -1 : 1;
+    return symbol * Math.log(Math.abs(delta)) * 10;
+  }
+
   _setCardRefs(index) {
     const i = index;
     return el => {
@@ -208,13 +223,14 @@ const Container = styled.div`
   // maxWidth is the width of Card. So need to include padding here.
   max-width: ${props => `${props.maxWidth + props.padding * 2}px`};
   min-width: ${props => `${props.minWidth + props.padding * 2}px`};
+  top: ${props => `${props.swipeOffset}px`};
+  transition: top 0.1s;
 `;
 const StyledDiv = styled.div`
   position: relative;
   margin: auto;
   margin-bottom: 10vh;
   height: 100vh;
-
   margin: 10px;
 `;
 
