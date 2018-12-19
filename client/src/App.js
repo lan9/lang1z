@@ -18,10 +18,13 @@ class App extends Component {
       width: undefined,
       height: undefined
     };
+
+    this._deckRef = undefined;
     this._toggleNightMode = this._toggleNightMode.bind(this);
     this._updateDimensions = this._updateDimensions.bind(this);
     this._renderContent = this._renderContent.bind(this);
     this._renderMainCardBottomBar = this._renderMainCardBottomBar.bind(this);
+    this._setDeckRef = this._setDeckRef.bind(this);
   }
 
   _toggleNightMode() {
@@ -36,6 +39,8 @@ class App extends Component {
       body = d.getElementsByTagName('body')[0],
       width = w.innerWidth || documentElement.clientWidth || body.clientWidth,
       height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
+
+    this._deckRef && this._deckRef.updateParentHeight();
 
     this.setState({ width: width, height: height });
   }
@@ -65,7 +70,7 @@ class App extends Component {
   }
   _renderContent() {
     return (
-      <CardDeck minWidth={200} maxWidth={500} initialActiveIndex={0}>
+      <CardDeck minWidth={200} maxWidth={500} initialActiveIndex={0} ref={this._setDeckRef}>
         <Card bottomBarContent={this._renderMainCardBottomBar()}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
           <p>{`I'm a software engineer at Twitter.`}</p>
@@ -73,6 +78,10 @@ class App extends Component {
         <Card>{'This card is left blank intentionally.'}</Card>
       </CardDeck>
     );
+  }
+
+  _setDeckRef(ref) {
+    this._deckRef = ref;
   }
 
   render() {

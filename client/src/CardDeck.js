@@ -14,10 +14,11 @@ class CardDeck extends React.PureComponent {
     this._setActiveIndex = this._setActiveIndex.bind(this);
     this._onTouchMove = this._onTouchMove.bind(this);
     this._getAdjustedSwipeOffset = this._getAdjustedSwipeOffset.bind(this);
+    this._getParentHeight = this._getParentHeight.bind(this);
+    this.updateParentHeight = this.updateParentHeight.bind(this);
 
     this._cardRefs = [];
     this._cardHeights = [];
-    this._parentHeight = undefined;
     this._lastSwipeChangeY = undefined;
 
     this.state = {
@@ -33,12 +34,16 @@ class CardDeck extends React.PureComponent {
     this._cardRefs.forEach(ref => {
       this._cardHeights.push(ReactDOM.findDOMNode(ref).clientHeight);
     });
-
-    this._parentHeight = ReactDOM.findDOMNode(this._ref).getBoundingClientRect().height;
-
-    this.setState({ initialRendered: true });
+    this.setState({ initialRendered: true, parentHeight: this._getParentHeight() });
   }
 
+  _getParentHeight() {
+    return ReactDOM.findDOMNode(this._ref).getBoundingClientRect().height;
+  }
+
+  updateParentHeight() {
+    this.setState({ parentHeight: this._getParentHeight() });
+  }
   render() {
     return (
       //TODO I don't really know why it worked
@@ -63,7 +68,7 @@ class CardDeck extends React.PureComponent {
 
   _calcBottoms(activeIndex) {
     const { topPadding, stackOffset, stackHoverOffset } = this.props;
-    const { hoveredCards } = this.state;
+    const { hoveredCards, parentHeight } = this.state;
 
     const numOfCards = this._cardHeights.length;
     const result = [];
@@ -77,15 +82,15 @@ class CardDeck extends React.PureComponent {
 
     for (let i = 0; i < activeIndex; i++) {
       // these cards are above view port
-      result[i] = this._parentHeight + 100;
+      result[i] = parentHeight + 100;
     }
 
     if (activeIndex - 1 >= 0) {
       // this card that sticks out of the top of the parent component
-      result[activeIndex - 1] = this._parentHeight - 30;
+      result[activeIndex - 1] = parentHeight - 30;
     }
 
-    result[activeIndex] = this._parentHeight - topPadding - this._cardHeights[activeIndex];
+    result[activeIndex] = parentHeight - topPadding - this._cardHeights[activeIndex];
 
     const shouldUseHoverOffset = Array.from(hoveredCards).filter(v => v > activeIndex).length > 0;
     for (let i = activeIndex + 1; i < numOfCards; i++) {

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.css';
 import App from './App';
-import {Provider} from 'react-redux';
-import {createStore} from 'redux';
-import {loadState, saveState} from './localStorage';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { loadState, saveState } from './localStorage';
 
 const createReducer = (initialState, actionHandlers) => {
   return (state = initialState, action) => {
@@ -19,7 +19,7 @@ const createReducer = (initialState, actionHandlers) => {
 const actionHandlers = {
   TOGGLE_NIGHTMODE: (state, action) => {
     // eslint-disable-line no-unused-vars
-    return {...state, nightmode: action.payload.mode};
+    return { ...state, nightmode: action.payload.mode };
   }
 };
 const reducers = createReducer({}, actionHandlers);
@@ -29,15 +29,15 @@ store.subscribe(() => saveState(store.getState()));
 
 ReactDOM.render(
   <Provider store={store}>
-    <App/>
+    <App />
   </Provider>,
   document.getElementById('root')
 );
 
 if (navigator.serviceWorker) {
-  navigator.serviceWorker.getRegistrations().then(function (registrations) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
     for (let registration of registrations) {
-      registration.unregister()
+      registration.unregister();
     }
   });
 }
