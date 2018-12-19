@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import { throttle } from 'lodash';
 import Transition from 'react-transition-group/Transition';
 
 class CardDeck extends React.PureComponent {
@@ -15,6 +16,7 @@ class CardDeck extends React.PureComponent {
     this._onTouchMove = this._onTouchMove.bind(this);
     this._getAdjustedSwipeOffset = this._getAdjustedSwipeOffset.bind(this);
     this._getParentHeight = this._getParentHeight.bind(this);
+    this._updateCardPosition = throttle(this._updateCardPosition.bind(this), 30);
     this.updateParentHeight = this.updateParentHeight.bind(this);
 
     this._cardRefs = [];
@@ -168,14 +170,18 @@ class CardDeck extends React.PureComponent {
   }
 
   _onTouchMove(e) {
+    const newScreenY = e.changedTouches[0] && e.changedTouches[0].screenY;
+    this._updateCardPosition(newScreenY)
+  }
+
+  _updateCardPosition(newScreenY) {
+
     const { children } = this.props;
     const { activeIndex } = this.state;
 
-    // TODO move this to componentWillUpdate
     const cardNum = children.length;
     const cardScrollThreshold = window.innerHeight / cardNum / 2;
 
-    const newScreenY = e.changedTouches[0] && e.changedTouches[0].screenY;
     if (newScreenY !== undefined) {
       const delta = this._lastSwipeChangeY !== undefined ? this._lastSwipeChangeY - newScreenY : 0;
       if (Math.abs(delta) > cardScrollThreshold) {
