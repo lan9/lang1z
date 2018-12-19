@@ -194,14 +194,15 @@ class CardDeck extends React.PureComponent {
         this.setState({ activeIndex: newActiveIndex });
         this._lastSwipeChangeY = newScreenY;
       } else {
-        this.setState({ swipeOffset: this._getAdjustedSwipeOffset(delta) });
+        const swipeOffset = this._getAdjustedSwipeOffset(delta);
+        this.setState({ swipeOffset });
       }
     }
   }
 
   _getAdjustedSwipeOffset(delta) {
     const symbol = delta < 0 ? -1 : 1;
-    return symbol * Math.log(Math.abs(delta)) * 10;
+    return symbol * (delta === 0 ? 0 : Math.log(Math.abs(delta)) * 10);
   }
 
   _setCardRefs(index) {
@@ -235,7 +236,7 @@ const Container = styled.div`
   max-width: ${props => `${props.maxWidth + props.padding * 2}px`};
   min-width: ${props => `${props.minWidth + props.padding * 2}px`};
   top: ${props => `${props.swipeOffset}px`};
-  transition: top 1s;
+  transition: top 0.5s;
 `;
 const StyledDiv = styled.div`
   position: relative;
