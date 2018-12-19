@@ -4,7 +4,6 @@ import twitterLogo from './images/twitter.svg';
 import linkedInLogo from './images/linkedin.svg';
 import sunIcon from './images/sun.svg';
 import moonIcon from './images/moon.svg';
-import registerServiceWorker from './registerServiceWorker';
 import Icon from './Icon';
 import styled, { ThemeProvider } from 'styled-components';
 import { connect } from 'react-redux';
@@ -47,7 +46,6 @@ class App extends Component {
 
   componentDidMount() {
     window.addEventListener('resize', this._updateDimensions);
-    registerServiceWorker();
   }
 
   componentWillUnmount() {
@@ -70,11 +68,9 @@ class App extends Component {
       <CardDeck minWidth={200} maxWidth={500} initialActiveIndex={0}>
         <Card bottomBarContent={this._renderMainCardBottomBar()}>
           <div className="App-title">{"Hello I'm Yuze."}</div>
-          <p>{`I'm a software engineer on Twitter's web team`}</p>
-          <p>{`Also a wannabe photographer and failing handyperson.`}</p>
+          <p>{`I'm a software engineer at Twitter.`}</p>
         </Card>
         <Card>{'This card is left blank intentionally.'}</Card>
-        <Card>{'This too.'}</Card>
       </CardDeck>
     );
   }
