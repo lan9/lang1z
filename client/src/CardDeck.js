@@ -180,7 +180,7 @@ class CardDeck extends React.PureComponent {
     const { activeIndex } = this.state;
 
     const cardNum = children.length;
-    const cardScrollThreshold = window.innerHeight / cardNum / 2;
+    const cardScrollThreshold = window.innerHeight / cardNum / 3;
 
     if (newScreenY !== undefined) {
       const delta = this._lastSwipeChangeY !== undefined ? this._lastSwipeChangeY - newScreenY : 0;
@@ -235,7 +235,7 @@ const Container = styled.div`
   max-width: ${props => `${props.maxWidth + props.padding * 2}px`};
   min-width: ${props => `${props.minWidth + props.padding * 2}px`};
   top: ${props => `${props.swipeOffset}px`};
-  transition: top 0.1s;
+  transition: top 1s;
 `;
 const StyledDiv = styled.div`
   position: relative;
