@@ -172,7 +172,6 @@ class CardDeck extends React.PureComponent {
   _onTouchMove(e) {
     const newScreenY = e.changedTouches[0] && e.changedTouches[0].screenY;
     this._updateCardPosition(newScreenY);
-    e.preventDefault();
   }
 
   _updateCardPosition(newScreenY) {
